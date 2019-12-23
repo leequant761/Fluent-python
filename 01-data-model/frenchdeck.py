@@ -5,6 +5,7 @@ import collections
 # a.suit
 # 코드의 가독성을 위해서 튜플을 대신한다. 하지만 딕셔너리를 사용하지 않는 이유는
 # 불변성과 메모리 낭비를 줄이기 위해서이다. 만약에 사전으로 바꾸고 싶다면 a._asdict()
+# 필드명과 클래스명을 추가한 튜플의 서브클래스를 생성하는 팩토리 함수; 디버깅할 떄 유용
 Card = collections.namedtuple('Card', ['rank', 'suit'])
 
 class FrenchDeck:
