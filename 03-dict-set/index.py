@@ -17,6 +17,7 @@ with open(sys.argv[1], encoding='utf-8') as fp:
             word = match.group()
             column_no = match.start()+1
             location = (line_no, column_no)
+            # setdefault() : 단어에 대한 리스트를 가져오거나 없으면 빈배열을 가져온다.
             index.setdefault(word, []).append(location)  # <1>
 
 # print in alphabetical order

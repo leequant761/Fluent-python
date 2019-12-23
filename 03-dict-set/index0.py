@@ -18,11 +18,12 @@ with open(sys.argv[1], encoding='utf-8') as fp:
             column_no = match.start()+1
             location = (line_no, column_no)
             # this is ugly; coded like this to make a point
-            occurrences = index.get(word, [])  # <1>
-            occurrences.append(location)       # <2>
-            index[word] = occurrences          # <3>
+            occurrences = index.get(word, [])  # <1> 없으면 빈 배열을 가져온다. (어색)
+            occurrences.append(location)       # <2> setdefault 메서드를 활용시
+            index[word] = occurrences          # <3> 세줄을 한줄로 바꿀 수 있다.
 
 # print in alphabetical order
 for word in sorted(index, key=str.upper):  # <4>
     print(word, index[word])
-# END INDEX0
+
+# python .\index0.py .\zen.txt

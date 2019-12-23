@@ -57,8 +57,8 @@ Tests for update using a `dict` or a sequence of pairs::
 
 import collections
 
-
-class StrKeyDict(collections.UserDict):  # <1>
+# 내장클래스를 상속할 때 발생하는 문제 때문에 UserDict가 편하다.(12장 1절)
+class StrKeyDict(collections.UserDict):  # <1> collections.UserDict 상속
 
     def __missing__(self, key):  # <2>
         if isinstance(key, str):
@@ -66,9 +66,9 @@ class StrKeyDict(collections.UserDict):  # <1>
         return self[str(key)]
 
     def __contains__(self, key):
-        return str(key) in self.data  # <3>
+        return str(key) in self.data  # <3> 이번엔 .keys() 없이 바로 조회가능
 
     def __setitem__(self, key, item):
-        self.data[str(key)] = item   # <4>
+        self.data[str(key)] = item   # <4> 재귀호출 걱정 없고 간단하게 str 형으로 저장
 
 # END STRKEYDICT
