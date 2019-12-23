@@ -18,8 +18,8 @@
 """
 
 # BEGIN CLIP_ANNOT
-
-def clip(text:str, max_len:'int > 0'=80) -> str:  # <1>
+# clip.py에서 annotation을 추가한 버전
+def clip(text:str, max_len:'int > 0'=80) -> str:  # <1> 함수 선언에 annotation을 추가
     """Return text clipped at the last space before or after max_len
     """
     end = None
@@ -35,4 +35,5 @@ def clip(text:str, max_len:'int > 0'=80) -> str:  # <1>
         end = len(text)
     return text[:end].rstrip()
 
-# END CLIP_ANNOT
+
+clip.__annotations__ # {'text': str, 'max_len': 'int > 0', 'return': str}

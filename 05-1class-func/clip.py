@@ -24,11 +24,12 @@ def clip(text, max_len=80):
     """
     end = None
     if len(text) > max_len:
-        space_before = text.rfind(' ', 0, max_len)
+        # 0부터 80까지 공백을 찾아라
+        space_before = text.rfind(' ', 0, max_len) # 시작점
         if space_before >= 0:
             end = space_before
         else:
-            space_after = text.rfind(' ', max_len)
+            space_after = text.rfind(' ', max_len) # 마지막
             if space_after >= 0:
                 end = space_after
     if end is None:  # no spaces were found

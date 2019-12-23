@@ -29,7 +29,12 @@ class BingoCage:
         except IndexError:
             raise LookupError('pick from empty BingoCage')  # <4>
 
-    def __call__(self):  # <5>
+    # __call__() 인스턴스 메서드만 구현하면 객체가 함수처럼 동작한다.
+    def __call__(self):  # <5> bingo.pick() 과 bingo()는 같은 역할
         return self.pick()
 
-# END BINGO
+bingo = BingoCage(range(3))
+bingo.pick()
+bingo()
+callable(bingo) # True
+
