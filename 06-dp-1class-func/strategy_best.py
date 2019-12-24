@@ -98,11 +98,12 @@ def large_order_promo(order):
 
 # BEGIN STRATEGY_BEST
 
-promos = [fidelity_promo, bulk_item_promo, large_order_promo]  # <1>
+promos = [fidelity_promo, bulk_item_promo, large_order_promo]  # <1> 프로모션 리스트
 
-def best_promo(order):  # <2>
+def best_promo(order):  # <2> 오더에 따른
     """Select best discount available
     """
-    return max(promo(order) for promo in promos)  # <3>
+    return max(promo(order) for promo in promos)  # <3> 최대 할인액
 
-# END STRATEGY_BEST
+# 이러한 코드 바익은 가독성이 좋고 제대로 작동하지만 프로모션 코드가 중복되어 있어 버그가 생길 여지
+# 만약 새로운 할인 함수를 추가하게 된다면 promos에 새 함수를 추가해야하기 때문이다.

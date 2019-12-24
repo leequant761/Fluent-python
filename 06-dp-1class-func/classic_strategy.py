@@ -1,32 +1,14 @@
 # classic_strategy.py
 # Strategy pattern -- classic implementation
 
-"""
-# BEGIN CLASSIC_STRATEGY_TESTS
-
-    >>> joe = Customer('John Doe', 0)  # <1>
-    >>> ann = Customer('Ann Smith', 1100)
-    >>> cart = [LineItem('banana', 4, .5),  # <2>
-    ...         LineItem('apple', 10, 1.5),
-    ...         LineItem('watermellon', 5, 5.0)]
-    >>> Order(joe, cart, FidelityPromo())  # <3>
-    <Order total: 42.00 due: 42.00>
-    >>> Order(ann, cart, FidelityPromo())  # <4>
-    <Order total: 42.00 due: 39.90>
-    >>> banana_cart = [LineItem('banana', 30, .5),  # <5>
-    ...                LineItem('apple', 10, 1.5)]
-    >>> Order(joe, banana_cart, BulkItemPromo())  # <6>
-    <Order total: 30.00 due: 28.50>
-    >>> long_order = [LineItem(str(item_code), 1, 1.0) # <7>
-    ...               for item_code in range(10)]
-    >>> Order(joe, long_order, LargeOrderPromo())  # <8>
-    <Order total: 10.00 due: 9.30>
-    >>> Order(joe, cart, LargeOrderPromo())
-    <Order total: 42.00 due: 42.00>
-
-# END CLASSIC_STRATEGY_TESTS
-"""
 # BEGIN CLASSIC_STRATEGY
+
+# 상황 설명 : 전자상거래 영역에서 할인을 계산하는 전략 패턴의 리팩토링
+# 할인 규칙
+# 1. 충성도 포인트가 1000점 이상이면 전체 구매의 5% 할인
+# 2. 하나의 상품을 20개 이상 구매하면 10% 할인
+# 3. 서로 다른 상품을 10개이상 구매하면 7% 할인
+# 간단하게 하기 위해 하나의 주문에는 하나의 할인 규칙만 적용된다 가정
 
 from abc import ABC, abstractmethod
 from collections import namedtuple
@@ -35,7 +17,7 @@ Customer = namedtuple('Customer', 'name fidelity')
 
 
 class LineItem:
-
+    """어떤 상품을 얼마나 담았는 지"""
     def __init__(self, product, quantity, price):
         self.product = product
         self.quantity = quantity
@@ -49,7 +31,7 @@ class Order:  # the Context
 
     def __init__(self, customer, cart, promotion=None):
         self.customer = customer
-        self.cart = list(cart)
+        self.cart = list(cart) # cart에는 LineItem 객체들의 리스트가 들어간다.
         self.promotion = promotion
 
     def total(self):
@@ -61,7 +43,7 @@ class Order:  # the Context
         if self.promotion is None:
             discount = 0
         else:
-            discount = self.promotion.discount(self)
+            discount = self.promotion.discount(self) # discount(self)에서의 self에는 Order 자기 자신(객체버전)을 참조
         return self.total() - discount
 
     def __repr__(self):
@@ -69,7 +51,7 @@ class Order:  # the Context
         return fmt.format(self.total(), self.due())
 
 
-class Promotion(ABC):  # the Strategy: an Abstract Base Class
+class Promotion(ABC):  # the Strategy: an Abstract Base Class; 전략 패턴을 명시적으로
 
     @abstractmethod
     def discount(self, order):
@@ -104,3 +86,25 @@ class LargeOrderPromo(Promotion):  # third Concrete Strategy
         return 0
 
 # END CLASSIC_STRATEGY
+
+joe = Customer('John Doe', 0)  # <1>
+ann = Customer('Ann Smith', 1100)
+cart = [LineItem('banana', 4, .5),  # <2>
+        LineItem('apple', 10, 1.5),
+        LineItem('watermellon', 5, 5.0)]
+Order(joe, cart, FidelityPromo())  # <3>
+#<Order total: 42.00 due: 42.00>
+Order(ann, cart, FidelityPromo())  # <4>
+#<Order total: 42.00 due: 39.90>
+banana_cart = [LineItem('banana', 30, .5),  # <5>
+               LineItem('apple', 10, 1.5)]
+Order(joe, banana_cart, BulkItemPromo())  # <6>
+#<Order total: 30.00 due: 28.50>
+long_order = [LineItem(str(item_code), 1, 1.0) # <7>
+              for item_code in range(10)]
+Order(joe, long_order, LargeOrderPromo())  # <8>
+#<Order total: 10.00 due: 9.30>
+Order(joe, cart, LargeOrderPromo())
+#<Order total: 42.00 due: 42.00>
+
+# 함수지향 전략을 통해 더 적은 코드로 구현할 수 있다.

@@ -88,6 +88,5 @@ def best_promo(order):
     """
     return max(promo(order) for promo in promos)
 
-# END STRATEGY_BEST3
-
-
+# 다른 방식으로는 할인 함수를 동적으로 수집할 때 데커레이터를 쓰면 더 명시적으로 가능
+# 7장에서 다루도록 하겠다.

@@ -97,7 +97,7 @@ def large_order_promo(order):
     return 0
 
 # BEGIN STRATEGY_BEST2
-
+# 모듈 내에서의 네임스페이스를 조사해서 만든 promotion들의 리스트
 promos = [globals()[name] for name in globals()  # <1>
             if name.endswith('_promo')  # <2>
             and name != 'best_promo']   # <3>
@@ -107,4 +107,5 @@ def best_promo(order):
     """
     return max(promo(order) for promo in promos)  # <4>
 
-# END STRATEGY_BEST2
+# 대안으로는 별도의 프로모션들의 모듈을 만들어서 거기서 정의된 모든 함수를 가져오는 것이다.
+# See strategy_best3.py
