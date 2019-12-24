@@ -29,3 +29,25 @@ sig.return_annotation # <class 'str'>
 for param in sig.parameters.values():
     note = repr(param.annotation).ljust(13)
     print(note, ':', param.name, '=', param.default)
+
+
+# 5. 클래스에서 attribute만 꺼내오기
+import inspect
+
+class NewClass(object):
+    def __init__(self, number):
+        self.multi = int(number) * 2
+        self.str = str(number)
+
+    def func_1(self):
+        pass
+
+a = NewClass(2)
+
+for i in inspect.getmembers(a):
+    # Ignores anything starting with underscore 
+    # (that is, private and protected attributes)
+    if not i[0].startswith('_'):
+        # Ignores methods
+        if not inspect.ismethod(i[1]):
+            print(i)
