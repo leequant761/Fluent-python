@@ -79,7 +79,7 @@ class Order:  # the Context
 
 promos = []  # <1>
 
-def promotion(promo_func):  # <2>
+def promotion(promo_func):  # <2> 데코레이터는 함수를 promos 리스트에 추가한 후 그대로
     promos.append(promo_func)
     return promo_func
 
@@ -111,3 +111,5 @@ def best_promo(order):  # <4>
     return max(promo(order) for promo in promos)
 
 # END STRATEGY_BEST4
+# 이렇게 하면 네이밍에 신경을 안써도 된다.
+# 어느 모듈에서든 사용할 수 있어서 확장성이 있다.
