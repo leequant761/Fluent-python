@@ -31,7 +31,7 @@ for param in sig.parameters.values():
     print(note, ':', param.name, '=', param.default)
 
 
-# 5. 클래스에서 attribute만 꺼내오기
+# 5. 클래스에서 attribute만 꺼내오기1
 import inspect
 
 class NewClass(object):
@@ -51,3 +51,6 @@ for i in inspect.getmembers(a):
         # Ignores methods
         if not inspect.ismethod(i[1]):
             print(i)
+
+# 5. 클래스에서 attribute만 꺼내오기2
+print(a.__dict__)
