@@ -16,11 +16,11 @@ class FrenchDeck2(collections.MutableSequence):
     def __getitem__(self, position):
         return self._cards[position]
 
-    def __setitem__(self, position, value):  # <1>
+    def __setitem__(self, position, value):  # <1> 카드를 섞기위해 뮤터블
         self._cards[position] = value
 
-    def __delitem__(self, position):  # <2>
+    def __delitem__(self, position):  # <2> MutableSequence를 상속했으니 무조건 추상메서드 구현해야함
         del self._cards[position]
 
-    def insert(self, position, value):  # <3>
+    def insert(self, position, value):  # <3> MutableSequence를 상속했으니 무조건 추상메서드 구현해야함
         self._cards.insert(position, value)

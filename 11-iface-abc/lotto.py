@@ -17,7 +17,7 @@ class LotteryBlower(Tombola):
         try:
             position = random.randrange(len(self._balls))  # <2>
         except ValueError:
-            raise LookupError('pick from empty BingoCage')
+            raise LookupError('pick from empty BingoCage')# ABC(톰볼라 인터페이스) 따라서
         return self._balls.pop(position)  # <3>
 
     def loaded(self):  # <4>
