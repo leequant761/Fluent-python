@@ -177,12 +177,14 @@ class Vector:
                 bytes(self._components))
 
     def __eq__(self, other):
+        '''이터레이터 비교로 메모리 절약; tuple(self)==tuple(other)는 비효율'''
         return (len(self) == len(other) and
                 all(a == b for a, b in zip(self, other)))
+    # 밀접히 작동하는 메서드들은 가깡 두는 습관을 들이자. eq~hash
 
     def __hash__(self):
         hashes = (hash(x) for x in self)
-        return functools.reduce(operator.xor, hashes, 0)
+        return functools.reduce(operator.xor, hashes, 0) # 비어있으면 에러가 생기니 0을 초기값으로 두는 습관을 들이자
 
     def __abs__(self):
         return math.sqrt(sum(x * x for x in self))

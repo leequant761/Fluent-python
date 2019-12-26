@@ -205,29 +205,30 @@ class Vector:
     shortcut_names = 'xyzt'
 
     def __getattr__(self, name):
-        cls = type(self)  # <1>
-        if len(name) == 1:  # <2>
-            pos = cls.shortcut_names.find(name)  # <3>
+        cls = type(self)  # <1> 벡터 클래스
+        if len(name) == 1:  # <2> 만약 x, y, z, t로 속성 접근하면
+            pos = cls.shortcut_names.find(name)  # <3> attr shortcut에서 x의 위치
             if 0 <= pos < len(self._components):  # <4>
                 return self._components[pos]
         msg = '{.__name__!r} object has no attribute {!r}'  # <5>
         raise AttributeError(msg.format(cls, name))
 # END VECTOR_V3_GETATTR
-
+# v.x = 7 을 입력하면 객체에 x 속성이 추가되면서 getattr을 불러오지 않는다.
+# 그 결과 벡터랑 v.x는 따로 놀게 된다. 그런 상황을 막고자...
 # BEGIN VECTOR_V3_SETATTR
     def __setattr__(self, name, value):
         cls = type(self)
-        if len(name) == 1:  # <1>
-            if name in cls.shortcut_names:  # <2>
+        if len(name) == 1:  # <1> 
+            if name in cls.shortcut_names:  # <2> x y z t로 수정하려하면
                 error = 'readonly attribute {attr_name!r}'
-            elif name.islower():  # <3>
+            elif name.islower():  # <3> 다른 걸로 수정하려하면 abcd...
                 error = "can't set attributes 'a' to 'z' in {cls_name!r}"
             else:
                 error = ''  # <4>
             if error:  # <5>
                 msg = error.format(cls_name=cls.__name__, attr_name=name)
                 raise AttributeError(msg)
-        super().__setattr__(name, value)  # <6>
+        super().__setattr__(name, value)  # <6> _components, 그외 변경&추가 가능(_ 수정 비추천)
 
 # END VECTOR_V3_SETATTR
 

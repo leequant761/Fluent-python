@@ -151,13 +151,13 @@ class Vector:
 
     def __getitem__(self, index):
         cls = type(self)  # <1>
-        if isinstance(index, slice):  # <2>
-            return cls(self._components[index])  # <3>
-        elif isinstance(index, numbers.Integral):  # <4>
-            return self._components[index]  # <5>
+        if isinstance(index, slice):  # <2> 슬라이스를 받으면
+            return cls(self._components[index])  # <3> 벡터로 반환하고
+        elif isinstance(index, numbers.Integral):  # <4> 정수 하나를 받으면
+            return self._components[index]  # <5> 숫자를 반환해라
         else:
             msg = '{cls.__name__} indices must be integers'
-            raise TypeError(msg.format(cls=cls))  # <6>
+            raise TypeError(msg.format(cls=cls))  # <6> 객체 포매팅도 가능
 # END VECTOR_V2
 
     @classmethod

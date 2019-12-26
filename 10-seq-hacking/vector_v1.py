@@ -92,14 +92,14 @@ class Vector:
     typecode = 'd'
 
     def __init__(self, components):
-        self._components = array(self.typecode, components)  # <1>
+        self._components = array(self.typecode, components)  # <1> 속성 감추기(불변형은 아니지만)
 
     def __iter__(self):
-        return iter(self._components)  # <2>
+        return iter(self._components)  # <2> 이터레이터 반환
 
     def __repr__(self):
-        components = reprlib.repr(self._components)  # <3>
-        components = components[components.find('['):-1]  # <4>
+        components = reprlib.repr(self._components)  # <3> 너무 길면 중간부터 생략한다
+        components = components[components.find('['):-1]  # <4> 앞에 타입코드는 제외
         return 'Vector({})'.format(components)
 
     def __str__(self):
@@ -122,5 +122,5 @@ class Vector:
     def frombytes(cls, octets):
         typecode = chr(octets[0])
         memv = memoryview(octets[1:]).cast(typecode)
-        return cls(memv)  # <7>
+        return cls(memv)  # <7> 클래스 생성자가 가변매개로 받지않고 이터레이블로 받으니 그대로 넘겨주면 된다.
 # END VECTOR_V1
