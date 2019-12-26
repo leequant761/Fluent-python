@@ -102,12 +102,12 @@ class Vector2d:
 
 # BEGIN VECTOR2D_V2_FORMAT
     def __format__(self, fmt_spec=''):
-        if fmt_spec.endswith('p'):  # <1>
-            fmt_spec = fmt_spec[:-1]  # <2>
+        if fmt_spec.endswith('p'):  # <1> format specifier가 'p'로 끝나면 polar
+            fmt_spec = fmt_spec[:-1]  # <2> .3f , .2e 등을 받음
             coords = (abs(self), self.angle())  # <3>
             outer_fmt = '<{}, {}>'  # <4>
         else:
-            coords = self  # <5>
+            coords = self.x, self.y  # <5>
             outer_fmt = '({}, {})'  # <6>
         components = (format(c, fmt_spec) for c in coords)  # <7>
         return outer_fmt.format(*components)  # <8>

@@ -1,5 +1,5 @@
 """
-A 2-dimensional vector class
+우리가 만들 Vector2d 객체가 수행할 기본적인
 
     >>> v1 = Vector2d(3, 4)
     >>> print(v1.x, v1.y)
@@ -69,8 +69,9 @@ class Vector2d:
 
 # BEGIN VECTOR2D_V1
     @classmethod  # <1>
-    def frombytes(cls, octets):  # <2>
-        typecode = chr(octets[0])  # <3>
-        memv = memoryview(octets[1:]).cast(typecode)  # <4>
-        return cls(*memv)  # <5>
+    def frombytes(cls, octets):  # <2>클래스메서드는 첫번쨰 인자로 클래스를 받음
+        '''클래스 메서드를 통해서 bytes문자열에서 Vector2d를 생성한다'''
+        typecode = chr(octets[0])  # <3> 'd'
+        memv = memoryview(octets[1:]).cast(typecode)  # <4> 메모리 뷰로 슬라이싱
+        return cls(*memv)  # <5> # Vector2d(x, y)
 # END VECTOR2D_V1

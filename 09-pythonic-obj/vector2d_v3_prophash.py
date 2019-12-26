@@ -77,7 +77,7 @@ Tests of `x` and `y` read-only properties:
 # END VECTOR2D_V3_HASH_DEMO
 
 Tests of hashing:
-# BEGIN VECTOR2D_V3_HASH_DEMO
+# BEGIN VECTOR2D_V3_HASH_DEMO ;
 
     >>> v1 = Vector2d(3, 4)
     >>> v2 = Vector2d(3.1, 4.2)
@@ -101,18 +101,18 @@ class Vector2d:
         self.__x = float(x)  # <1>
         self.__y = float(y)
 
-    @property  # <2>
+    @property  # <2> getter method
     def x(self):  # <3>
         return self.__x  # <4>
 
-    @property  # <5>
+    @property  # <5> getter method
     def y(self):
         return self.__y
 
     def __iter__(self):
         return (i for i in (self.x, self.y))  # <6>
 
-    # remaining methods follow (omitted in book listing)
+    # 아래부분은 책에서는 생략한 부분들
 # END VECTOR2D_V3_PROP
 
     def __repr__(self):
@@ -131,7 +131,8 @@ class Vector2d:
 
 # BEGIN VECTOR_V3_HASH
     def __hash__(self):
-        return hash(self.x) ^ hash(self.y)
+        '''해쉬 메서드를 작성할 땐 __eq__ 메서드에서 사용되는 속성을 참고해라'''
+        return hash(self.x) ^ hash(self.y) # 일반적으로 해쉬값은 ^는 비트단위 XOR을 권장
 # END VECTOR_V3_HASH
 
     def __abs__(self):
