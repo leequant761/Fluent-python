@@ -290,7 +290,7 @@ class Vector:
         return Vector(-x for x in self)  # <1>
 
     def __pos__(self):
-        return Vector(self)  # <2>
+        return Vector(self)  # <2> 단항연산자는 self를 받아서 처리; 사본을 반환
 # END VECTOR_V6_UNARY
 
     def __bool__(self):
@@ -352,7 +352,7 @@ class Vector:
 # BEGIN VECTOR_V6_ADD
     def __add__(self, other):
         try:
-            pairs = itertools.zip_longest(self, other, fillvalue=0.0)
+            pairs = itertools.zip_longest(self, other, fillvalue=0.0) # 벡터 길이가 다를 떄도 지원
             return Vector(a + b for a, b in pairs)
         except TypeError:
             return NotImplemented

@@ -78,7 +78,7 @@ class AddableBingoCage(BingoCage):  # <2>
                 msg = "right operand in += must be {!r} or an iterable"
                 raise TypeError(msg.format(self_cls))
         self.load(other_iterable)  # <7>
-        return self  # <8>
+        return self  # <8> iadd같은 할당연산 특별메서드는 무조건 self를 반환해야한다.
 
 
 

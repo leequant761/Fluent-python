@@ -327,12 +327,12 @@ class Vector:
                 bytes(self._components))
 
 # BEGIN VECTOR_V8_EQ
-    def __eq__(self, other):
-        if isinstance(other, Vector):  # <1>
+    def __eq__(self, other): # 보수적으로 구스타이핑을 하자
+        if isinstance(other, Vector):  # <1> 벡터계열일 때 값이 같다면 같음
             return (len(self) == len(other) and
                     all(a == b for a, b in zip(self, other)))
         else:
-            return NotImplemented  # <2>
+            return NotImplemented  # <2> 이 에러가 반환되면 req를 하고 또 안되면 id(v1)==id(v2)반환
 # END VECTOR_V8_EQ
 
     def __hash__(self):
