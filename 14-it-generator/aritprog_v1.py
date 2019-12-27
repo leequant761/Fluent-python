@@ -33,8 +33,8 @@ class ArithmeticProgression:
         self.step = step
         self.end = end  # None -> "infinite" series
 
-    def __iter__(self):
-        result = type(self.begin + self.step)(self.begin)  # <2>
+    def __iter__(self): # StopIteration 조건이 곧 while 탈출 조건
+        result = type(self.begin + self.step)(self.begin)  # <2> 객체생성(다형성)
         forever = self.end is None  # <3>
         index = 0
         while forever or result < self.end:  # <4>
