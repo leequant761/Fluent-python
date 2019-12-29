@@ -73,20 +73,23 @@ class LookingGlass:
 
     def __enter__(self):  # <1>
         import sys
-        self.original_write = sys.stdout.write  # <2>
-        sys.stdout.write = self.reverse_write  # <3>
-        return 'JABBERWOCKY'  # <4>
+        self.original_write = sys.stdout.write  # <2> 출력된 문자열을 저장
+        sys.stdout.write = self.reverse_write  # <3> 메서드 monkey patch
+        return 'JABBERWOCKY'  # <4> with LookngGlasss() as ~~~에서 ~~~에게 JABBERWOCKY
 
-    def reverse_write(self, text):  # <5>
+    def reverse_write(self, text):  # <5> 거꾸로 읽으라는 메서드 멍키패칭
         self.original_write(text[::-1])
 
-    def __exit__(self, exc_type, exc_value, traceback):  # <6>
+    def __exit__(self, exc_type, exc_value, traceback):  # <6> 빠져나오면서 뒤의 3개의 None argument;
         import sys  # <7>
         sys.stdout.write = self.original_write  # <8>
         if exc_type is ZeroDivisionError:  # <9>
             print('Please DO NOT divide by zero!')
             return True  # <10>
-        # <11>
+        # <11> return True나 None이 아니면 ...?  예외가 상위코드로 전달?
 
+# exc_type : ZeroDivisionError 등의 예외 클래스; with 안에서 예외발생시 처리방법
+# exc_value : 예외 객체, 예외 메시지 등 
+# traceback : ??
 
 # END MIRROR_EX

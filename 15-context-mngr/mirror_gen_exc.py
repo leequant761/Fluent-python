@@ -89,8 +89,8 @@ def looking_glass():
     sys.stdout.write = reverse_write
     msg = ''  # <1>
     try:
-        yield 'JABBERWOCKY'
-    except ZeroDivisionError:  # <2>
+        yield 'JABBERWOCKY' # 에러가 발생하면 yield에서 에러가 발생
+    except ZeroDivisionError:  # <2> 그래서 여기서 예외처리 구문 작성
         msg = 'Please DO NOT divide by zero!'
     finally:
         sys.stdout.write = original_write  # <3>
