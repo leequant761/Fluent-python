@@ -2,9 +2,9 @@
 A coroutine to compute a running average
 
 # BEGIN CORO_AVERAGER_TEST
-    >>> coro_avg = averager()  # <1>
-    >>> next(coro_avg)  # <2>
-    >>> coro_avg.send(10)  # <3>
+    >>> coro_avg = averager()  # <1> 코루틴 생성
+    >>> next(coro_avg)  # <2> 코루틴 실행
+    >>> coro_avg.send(10)  # <3> 이동평균 생성
     10.0
     >>> coro_avg.send(30)
     20.0

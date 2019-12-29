@@ -64,14 +64,14 @@ Event = collections.namedtuple('Event', 'time proc action')
 
 
 # BEGIN TAXI_PROCESS
-def taxi_process(ident, trips, start_time=0):  # <1>
+def taxi_process(ident, trips, start_time=0):  # <1> 택시 ID, 운행할 횟수, 택시가 차고를 나오는 시간
     """Yield to simulator issuing event at each state change"""
-    time = yield Event(start_time, ident, 'leave garage')  # <2>
-    for i in range(trips):  # <3>
-        time = yield Event(time, ident, 'pick up passenger')  # <4>
-        time = yield Event(time, ident, 'drop off passenger')  # <5>
+    time = yield Event(start_time, ident, 'leave garage')  # <2> 처음 생성된 이벤트는 리브, 그리고 suspend한 다음에 나중에 손님을 태웠다는 센드를 받으면 time을 받는다
+    for i in range(trips):  # <3> 운행할 횟수 동안
+        time = yield Event(time, ident, 'pick up passenger')  # <4> 이전에 받은 타임을 가지고 픽업을 했다는 이벤트를 생성 그다음 코루틴을 suspend한 다음에 손님을 내렸다는 센드를 받으면 time을 받는다. 
+        time = yield Event(time, ident, 'drop off passenger')  # <5> 이전에 받은 타임을 가지고 내렸다는 이벤트를 생성 그 다음 코루틴을 suspend한 다음에 손님을 태우면 time을 받는다.
 
-    yield Event(time, ident, 'going home')  # <6>
+    yield Event(time, ident, 'going home')  # <6> ( 운행할 횟수를 다 채우면;) 이전에 받은 타임을 가지고 곧 집가는 시간이라고 해서 출력 ; 이때는 a = yield b가 아닌 것을 주목; 이 구문이 실행된 뒤에 send를 보내면 StopIteration을 뱉는다.
     # end of taxi process # <7>
 # END TAXI_PROCESS
 
@@ -87,30 +87,30 @@ class Simulator:
         """Schedule and display events until time is up"""
         # schedule the first event for each cab
         for _, proc in sorted(self.procs.items()):  # <2>
-            first_event = next(proc)  # <3>
-            self.events.put(first_event)  # <4>
+            first_event = next(proc)  # <3> first_event에 출발시간 이벤트 바인딩; 그리고 proc은 코루틴 실행된 상태로 있음
+            self.events.put(first_event)  # <4> 우선순위큐에(시간이 키) 보관
 
         # main loop of the simulation
-        sim_time = 0  # <5>
-        while sim_time < end_time:  # <6>
+        sim_time = 0  # <5> 시계 0
+        while sim_time < end_time:  # <6> 시뮬레이션 제한시간 초과하면 중단
             if self.events.empty():  # <7>
                 print('*** end of events ***')
-                break
+                break # 큐가 비었으면; 모든 택시들이 제한시간내에 집갔으면 중단
 
-            current_event = self.events.get()  # <8>
-            sim_time, proc_id, previous_action = current_event  # <9>
+            current_event = self.events.get()  # <8> time이 가장 작은 이벤트를 받는다; pop연산임
+            sim_time, proc_id, previous_action = current_event  # <9> 그 이벤트에서 시간, 택시번호, 최근에 택시의 활동을 받는다
             print('taxi:', proc_id, proc_id * '   ', current_event)  # <10>
-            active_proc = self.procs[proc_id]  # <11>
-            next_time = sim_time + compute_duration(previous_action)  # <12>
+            active_proc = self.procs[proc_id]  # <11> 현재 활성화된 택시에 관한 코루틴을 받는다
+            next_time = sim_time + compute_duration(previous_action)  # <12> 픽업하는데/내리는데/집가는데 걸리는 시간을 계산(지수분포)
             try:
-                next_event = active_proc.send(next_time)  # <13>
+                next_event = active_proc.send(next_time)  # <13> 택시 코루틴에 다음의 행동까지 걸린 시간을 보낸다
             except StopIteration:
-                del self.procs[proc_id]  # <14>
+                del self.procs[proc_id]  # <14> 스탑이터레이션; 즉 집가는 것까지 yield를 한 closed한 상태의 코루틴 삭제
             else:
-                self.events.put(next_event)  # <15>
-        else:  # <16>
+                self.events.put(next_event)  # <15> 예외가 발생하지 않으면 next_event 추가
+        else:  # <16> 예외가 발생하지 않고(큐가 비어있는 경우가 발생하지 않고) 시뮬레이션 시간이 초과됐을 때
             msg = '*** end of simulation time: {} events pending ***'
-            print(msg.format(self.events.qsize()))
+            print(msg.format(self.events.qsize())) # 남아있는 이벤트 갯수
 # END TAXI_SIMULATOR
 
 
@@ -136,13 +136,12 @@ def main(end_time=DEFAULT_END_TIME, num_taxis=DEFAULT_NUMBER_OF_TAXIS,
         random.seed(seed)  # get reproducible results
 
     taxis = {i: taxi_process(i, (i+1)*2, i*DEPARTURE_INTERVAL)
-             for i in range(num_taxis)}
+             for i in range(num_taxis)} # 택시별 출발시간 초기화 ; 각 딕셔너리 원소는 코루틴(제너레이터)이기 때문에 언제나 send를 기다리고 있다. 
     sim = Simulator(taxis)
     sim.run(end_time)
 
 
 if __name__ == '__main__':
-
     parser = argparse.ArgumentParser(
                         description='Taxi fleet simulator.')
     parser.add_argument('-e', '--end-time', type=int,
@@ -155,7 +154,6 @@ if __name__ == '__main__':
                         % DEFAULT_NUMBER_OF_TAXIS)
     parser.add_argument('-s', '--seed', type=int, default=None,
                         help='random generator seed (for testing)')
-
     args = parser.parse_args()
     main(args.end_time, args.taxis, args.seed)
 

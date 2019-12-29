@@ -30,7 +30,7 @@ the coroutine::
     >>> try:
     ...     coro_avg.send(None)
     ... except StopIteration as exc:
-    ...     result = exc.value
+    ...     result = exc.value # 반환되는 값을 가져오는 법(StopIteration 속성에 담기는 것을 이용하여)
     ...
     >>> result
     Result(count=3, average=15.5)
@@ -53,7 +53,7 @@ def averager():
     while True:
         term = yield
         if term is None:
-            break  # <1>
+            break  # <1> return을 하려면 코루틴이 정상적으로 종료되어만 함; 만약 에러를 발생시키면 종료된 코루틴 반환됨
         total += term
         count += 1
         average = total/count

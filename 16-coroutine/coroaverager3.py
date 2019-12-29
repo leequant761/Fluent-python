@@ -47,7 +47,7 @@ Result = namedtuple('Result', 'count average')
 
 
 # the subgenerator
-def averager():  # <1>
+def averager():  # <1> 이전에 작성했던 코루틴인데 여기선 서브제너레이터
     total = 0.0
     count = 0
     average = None
@@ -58,13 +58,13 @@ def averager():  # <1>
         total += term
         count += 1
         average = total/count
-    return Result(count, average)  # <4>
+    return Result(count, average)  # <4> 이 Result는 yield from averager()의 값이 될 예정, 호출자가 None을 보내줘서 하위 제너레이터에서 리턴문 실행시 dele gen의 이 코루틴을 호출한 곳에서 StopIteration 예외 발생시킴
 
 
 # the delegating generator
 def grouper(results, key):  # <5>
     while True:  # <6>
-        results[key] = yield from averager()  # <7>
+        results[key] = yield from averager()  # <7> results[key]에 한 averager 코루틴이 바인딩되고 값을 send로 보내면 받을 수 있다.
 
 
 # the client code, a.k.a. the caller
@@ -72,10 +72,10 @@ def main(data):  # <8>
     results = {}
     for key, values in data.items():
         group = grouper(results, key)  # <9>
-        next(group)  # <10>
+        next(group)  # <10> 코루틴 실행
         for value in values:
             group.send(value)  # <11>
-        group.send(None)  # important! <12>
+        group.send(None)  # important! <12> 논을 받으면 Result 받음 
 
     # print(results)  # uncomment to debug
     report(results)
