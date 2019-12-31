@@ -60,9 +60,9 @@ class Quantity:
 
     def __get__(self, instance, owner):
         if instance is None:
-            return self  # <1>
+            return self  # <1> LineItem.weight 로 접근하면 디스크립터 자체를 반환
         else:
-            return getattr(instance, self.storage_name)  # <2>
+            return getattr(instance, self.storage_name)  # <2> 아니면 관리대상 arttribute를 반환
 
     def __set__(self, instance, value):
         if value > 0:

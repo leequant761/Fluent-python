@@ -39,7 +39,7 @@ instance::
 """
 
 
-# BEGIN LINEITEM_V4_PROP
+# BEGIN LINEITEM_V4_PROP : 디스크립터 대신에 프로퍼티 팩토리 작성
 def quantity():  # <1>
     try:
         quantity.counter += 1  # <2>
