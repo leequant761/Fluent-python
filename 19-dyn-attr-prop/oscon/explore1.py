@@ -1,48 +1,3 @@
-"""
-explore1.py: Script to explore the OSCON schedule feed
-
-    >>> from osconfeed import load
-    >>> raw_feed = load()
-    >>> feed = FrozenJSON(raw_feed)
-    >>> len(feed.Schedule.speakers)
-    357
-    >>> sorted(feed.Schedule.keys())
-    ['conferences', 'events', 'speakers', 'venues']
-    >>> for key, value in sorted(feed.Schedule.items()):
-    ...     print('{:3} {}'.format(len(value), key))
-    ...
-      1 conferences
-    484 events
-    357 speakers
-     53 venues
-    >>> feed.Schedule.speakers[-1].name
-    'Carina C. Zona'
-    >>> talk = feed.Schedule.events[40]
-    >>> type(talk)
-    <class 'explore1.FrozenJSON'>
-    >>> talk.name
-    'There *Will* Be Bugs'
-    >>> talk.speakers
-    [3471, 5199]
-    >>> talk.flavor
-    Traceback (most recent call last):
-      ...
-    KeyError: 'flavor'
-
-Handle keywords by appending a `_`.
-
-# BEGIN EXPLORE1_DEMO
-
-    >>> grad = FrozenJSON({'name': 'Jim Bo', 'class': 1982})
-    >>> grad.name
-    'Jim Bo'
-    >>> grad.class_
-    1991
-
-# END EXPLORE1_DEMO
-
-"""
-
 from collections import abc
 import keyword
 
@@ -56,7 +11,7 @@ class FrozenJSON:
     def __init__(self, mapping):
         self.__data = {}
         for key, value in mapping.items():
-            if keyword.iskeyword(key):  # <1>
+            if keyword.iskeyword(key):  # <1> 그러므로 파이썬의 키워드 일 경우 앞에 _를 붙이자.
                 key += '_'
             self.__data[key] = value
 # END EXPLORE1
@@ -76,3 +31,9 @@ class FrozenJSON:
         else:  # <8>
             return obj
 
+if __name__=='__main__':
+    grad = FrozenJSON({'name': 'Jim Bo', 'class': 1982})
+    grad.name
+    # grad.class # 예약어이므로 class 속성을 읽을 수 없다.
+    # getattr(grad, 'class_') # 그래서 이렇게 읽어야만 한다.
+    grad.class_ # 1982

@@ -44,20 +44,20 @@ class LineItem:
 
     def __init__(self, description, weight, price):
         self.description = description
-        self.weight = weight  # <1>
+        self.weight = weight  # <1> 프로퍼티 세터를 활용하여 음수가 못들어가게
         self.price = price
 
     def subtotal(self):
         return self.weight * self.price
 
-    @property  # <2>
+    @property  # <2> 게터메서드 장식
     def weight(self):  # <3>
-        return self.__weight  # <4>
+        return self.__weight  # <4> 실제로 값은 비공개 속성에 저장
 
-    @weight.setter  # <5>
+    @weight.setter  # <5> 장식된 게터메서드엔 이미 setter라는 속성이 있다
     def weight(self, value):
         if value > 0:
-            self.__weight = value  # <6>
+            self.__weight = value  # <6> 값이 0보다 크면 저장
         else:
-            raise ValueError('value must be > 0')  # <7>
+            raise ValueError('value must be > 0')  # <7> 아니면 예외
 # END LINEITEM_V2

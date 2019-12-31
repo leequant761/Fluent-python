@@ -21,3 +21,6 @@ class Foo:
     def bar(self, value):
         self.__dict__['bar'] = value
 # END DOC_PROPERTY
+
+help(Foo)
+help(Foo.bar)
