@@ -39,3 +39,11 @@ if __name__ == '__main__':
             return 13
 
     f = Fake() # 추상메서드 loaded를 구현하지 않아서 인스턴스화 되지 않음
+    
+    @Tombola.register
+    class Fake2():
+        def pick(self):
+            return 13
+
+    f = Fake2()
+    f.pick()
