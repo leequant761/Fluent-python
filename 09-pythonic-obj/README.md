@@ -16,7 +16,31 @@
 
 
 
-`@classmethod` : 클래스에 묶이는 메소드(첫번째 인자로 self가 아닌 cls를 받는다)
+`@classmethod` : 클래스에 묶이는 메소드(첫번째 인자로 self가 아닌 cls를 받는다) alternative constructor로 자주 쓰인다.
+
+```python
+# 예제1
+class A:
+    
+    A.frombytes(octests)
+    @classmethod
+    def frombytes(cls, octests):
+        typecode = chr(octests[0])
+        memv = memoryview(octests[1:]).cast(typecode)
+        return cls(*memv)
+
+# 예제2; 711 page
+class B:
+    
+    B.build(obj)
+    @classmethod
+    def build(cls, obj):
+        if isinstance(obj, abc.Mapping):
+            return cls(obj)
+    
+```
+
+
 
 
 
